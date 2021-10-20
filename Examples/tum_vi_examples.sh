@@ -1,8 +1,8 @@
 #!/bin/bash
-pathDatasetTUM_VI='/Datasets/TUM_VI' #Example, it is necesary to change it by the dataset path
+pathDatasetTUM_VI=$1 #Example, it is necesary to change it by the dataset path
 
 #------------------------------------
-# Monocular Examples
+MonocularExamples() {
 echo "Launching Room 1 with Monocular sensor"
 ./Monocular/mono_tum_vi ../Vocabulary/ORBvoc.txt Monocular/TUM_512.yaml "$pathDatasetTUM_VI"/dataset-room1_512_16/mav0/cam0/data Monocular/TUM_TimeStamps/dataset-room1_512.txt dataset-room1_512_mono
 
@@ -20,10 +20,10 @@ echo "Launching Room 5 with Monocular sensor"
 
 echo "Launching Room 6 with Monocular sensor"
 ./Monocular/mono_tum_vi ../Vocabulary/ORBvoc.txt Monocular/TUM_512.yaml "$pathDatasetTUM_VI"/dataset-room6_512_16/mav0/cam0/data Monocular/TUM_TimeStamps/dataset-room6_512.txt dataset-room6_512_mono
-
+}
 
 #------------------------------------
-# Stereo Examples
+StereoExamples() {
 echo "Launching Room 1 with Stereo sensor"
 ./Stereo/stereo_tum_vi ../Vocabulary/ORBvoc.txt Stereo/TUM_512.yaml "$pathDatasetTUM_VI"/dataset-room1_512_16/mav0/cam0/data "$pathDatasetTUM_VI"/dataset-room1_512_16/mav0/cam1/data Stereo/TUM_TimeStamps/dataset-room1_512.txt dataset-room1_512_stereo
 
@@ -41,10 +41,10 @@ echo "Launching Room 5 with Stereo sensor"
 
 echo "Launching Room 6 with Stereo sensor"
 ./Stereo/stereo_tum_vi ../Vocabulary/ORBvoc.txt Stereo/TUM_512.yaml "$pathDatasetTUM_VI"/dataset-room6_512_16/mav0/cam0/data "$pathDatasetTUM_VI"/dataset-room6_512_16/mav0/cam1/data Stereo/TUM_TimeStamps/dataset-room6_512.txt dataset-room6_512_stereo
-
+}
 
 #------------------------------------
-# Monocular-Inertial Examples
+MonocularInertialExamples() {
 echo "Launching Corridor 1 with Monocular-Inertial sensor"
 ./Monocular-Inertial/mono_inertial_tum_vi ../Vocabulary/ORBvoc.txt Monocular-Inertial/TUM_512.yaml "$pathDatasetTUM_VI"/dataset-corridor1_512_16/mav0/cam0/data Monocular-Inertial/TUM_TimeStamps/dataset-corridor1_512.txt Monocular-Inertial/TUM_IMU/dataset-corridor1_512.txt dataset-corridor1_512_monoi
 
@@ -132,17 +132,18 @@ echo "Launching Slides 2 with Monocular-Inertial sensor"
 
 echo "Launching Slides 3 with Monocular-Inertial sensor"
 ./Monocular-Inertial/mono_inertial_tum_vi ../Vocabulary/ORBvoc.txt Monocular-Inertial/TUM_512.yaml "$pathDatasetTUM_VI"/dataset-slides3_512_16/mav0/cam0/data Monocular-Inertial/TUM_TimeStamps/dataset-slides3_512.txt Monocular-Inertial/TUM_IMU/dataset-slides3_512.txt dataset-slides3_512_monoi
+}
 
-
-# MultiSession Monocular Examples
+MultiSessionMonocularExamples() {
 echo "Launching Room 1, Magistrale 1, Magistrale 5 and Slides 1 in the same session with Stereo-Inertial sensor"
 ./Monocular-Inertial/mono_inertial_tum_vi ../Vocabulary/ORBvoc.txt Monocular-Inertial/TUM_512.yaml "$pathDatasetTUM_VI"/dataset-room1_512_16/mav0/cam0/data Stereo-Inertial/TUM_TimeStamps/dataset-room1_512.txt Stereo-Inertial/TUM_IMU/dataset-room1_512.txt "$pathDatasetTUM_VI"/dataset-magistrale1_512_16/mav0/cam0/data Stereo-Inertial/TUM_TimeStamps/dataset-magistrale1_512.txt Stereo-Inertial/TUM_IMU/dataset-magistrale1_512.txt "$pathDatasetTUM_VI"/dataset-magistrale5_512_16/mav0/cam0/data Stereo-Inertial/TUM_TimeStamps/dataset-magistrale5_512.txt Stereo-Inertial/TUM_IMU/dataset-magistrale5_512.txt "$pathDatasetTUM_VI"/dataset-slides1_512_16/mav0/cam0/data Stereo-Inertial/TUM_TimeStamps/dataset-slides1_512.txt Stereo-Inertial/TUM_IMU/dataset-slides1_512.txt dataset-room1_mag1_mag5_slides1_monoi
 
 echo "Launching all Rooms (1-6) in the same session with Stereo-Inertial sensor"
 ./Monocular-Inertial/mono_inertial_tum_vi ../Vocabulary/ORBvoc.txt Monocular-Inertial/TUM_512.yaml "$pathDatasetTUM_VI"/dataset-room1_512_16/mav0/cam0/data Stereo-Inertial/TUM_TimeStamps/dataset-room1_512.txt Stereo-Inertial/TUM_IMU/dataset-room1_512.txt "$pathDatasetTUM_VI"/dataset-room2_512_16/mav0/cam0/data Stereo-Inertial/TUM_TimeStamps/dataset-room2_512.txt Stereo-Inertial/TUM_IMU/dataset-room2_512.txt "$pathDatasetTUM_VI"/dataset-room3_512_16/mav0/cam0/data Stereo-Inertial/TUM_TimeStamps/dataset-room3_512.txt Stereo-Inertial/TUM_IMU/dataset-room3_512.txt "$pathDatasetTUM_VI"/dataset-room4_512_16/mav0/cam0/data Stereo-Inertial/TUM_TimeStamps/dataset-room4_512.txt Stereo-Inertial/TUM_IMU/dataset-room4_512.txt "$pathDatasetTUM_VI"/dataset-room5_512_16/mav0/cam0/data Stereo-Inertial/TUM_TimeStamps/dataset-room5_512.txt Stereo-Inertial/TUM_IMU/dataset-room5_512.txt "$pathDatasetTUM_VI"/dataset-room6_512_16/mav0/cam0/data Stereo-Inertial/TUM_TimeStamps/dataset-room6_512.txt Stereo-Inertial/TUM_IMU/dataset-room6_512.txt dataset-rooms123456_monoi
+}
 
 #------------------------------------
-# Stereo-Inertial Examples
+StereoInertialExamples() {
 echo "Launching Corridor 1 with Stereo-Inertial sensor"
 ./Stereo-Inertial/stereo_inertial_tum_vi ../Vocabulary/ORBvoc.txt Stereo-Inertial/TUM_512.yaml "$pathDatasetTUM_VI"/dataset-corridor1_512_16/mav0/cam0/data "$pathDatasetTUM_VI"/dataset-corridor1_512_16/mav0/cam1/data Stereo-Inertial/TUM_TimeStamps/dataset-corridor1_512.txt Stereo-Inertial/TUM_IMU/dataset-corridor1_512.txt dataset-corridor1_512_stereoi
 
@@ -230,11 +231,14 @@ echo "Launching Slides 2 with Stereo-Inertial sensor"
 
 echo "Launching Slides 3 with Stereo-Inertial sensor"
 ./Stereo-Inertial/stereo_inertial_tum_vi ../Vocabulary/ORBvoc.txt Stereo-Inertial/TUM_512.yaml "$pathDatasetTUM_VI"/dataset-slides3_512_16/mav0/cam0/data "$pathDatasetTUM_VI"/dataset-slides3_512_16/mav0/cam1/data Stereo-Inertial/TUM_TimeStamps/dataset-slides3_512.txt Stereo-Inertial/TUM_IMU/dataset-slides3_512.txt dataset-slides3_512_stereoi
+}
 
-
-# MultiSession Stereo-Inertial Examples
+MultiSessionStereoInertialExamples() {
 echo "Launching Room 1, Magistrale 1, Magistrale 5 and Slides 1 in the same session with Stereo-Inertial sensor"
 ./Stereo-Inertial/stereo_inertial_tum_vi ../Vocabulary/ORBvoc.txt Stereo-Inertial/TUM_512.yaml "$pathDatasetTUM_VI"/dataset-room1_512_16/mav0/cam0/data "$pathDatasetTUM_VI"/dataset-room1_512_16/mav0/cam1/data Stereo-Inertial/TUM_TimeStamps/dataset-room1_512.txt Stereo-Inertial/TUM_IMU/dataset-room1_512.txt "$pathDatasetTUM_VI"/dataset-magistrale1_512_16/mav0/cam0/data "$pathDatasetTUM_VI"/dataset-magistrale1_512_16/mav0/cam1/data Stereo-Inertial/TUM_TimeStamps/dataset-magistrale1_512.txt Stereo-Inertial/TUM_IMU/dataset-magistrale1_512.txt "$pathDatasetTUM_VI"/dataset-magistrale5_512_16/mav0/cam0/data "$pathDatasetTUM_VI"/dataset-magistrale5_512_16/mav0/cam1/data Stereo-Inertial/TUM_TimeStamps/dataset-magistrale5_512.txt Stereo-Inertial/TUM_IMU/dataset-magistrale5_512.txt "$pathDatasetTUM_VI"/dataset-slides1_512_16/mav0/cam0/data "$pathDatasetTUM_VI"/dataset-slides1_512_16/mav0/cam1/data Stereo-Inertial/TUM_TimeStamps/dataset-slides1_512.txt Stereo-Inertial/TUM_IMU/dataset-slides1_512.txt dataset-room1_mag1_mag5_slides1_stereoi
 
 echo "Launching all Rooms (1-6) in the same session with Stereo-Inertial sensor"
 ./Stereo-Inertial/stereo_inertial_tum_vi ../Vocabulary/ORBvoc.txt Stereo-Inertial/TUM_512.yaml "$pathDatasetTUM_VI"/dataset-room1_512_16/mav0/cam0/data "$pathDatasetTUM_VI"/dataset-room1_512_16/mav0/cam1/data Stereo-Inertial/TUM_TimeStamps/dataset-room1_512.txt Stereo-Inertial/TUM_IMU/dataset-room1_512.txt "$pathDatasetTUM_VI"/dataset-room2_512_16/mav0/cam0/data "$pathDatasetTUM_VI"/dataset-room2_512_16/mav0/cam1/data Stereo-Inertial/TUM_TimeStamps/dataset-room2_512.txt Stereo-Inertial/TUM_IMU/dataset-room2_512.txt "$pathDatasetTUM_VI"/dataset-room3_512_16/mav0/cam0/data "$pathDatasetTUM_VI"/dataset-room3_512_16/mav0/cam1/data Stereo-Inertial/TUM_TimeStamps/dataset-room3_512.txt Stereo-Inertial/TUM_IMU/dataset-room3_512.txt "$pathDatasetTUM_VI"/dataset-room4_512_16/mav0/cam0/data "$pathDatasetTUM_VI"/dataset-room4_512_16/mav0/cam1/data Stereo-Inertial/TUM_TimeStamps/dataset-room4_512.txt Stereo-Inertial/TUM_IMU/dataset-room4_512.txt "$pathDatasetTUM_VI"/dataset-room5_512_16/mav0/cam0/data "$pathDatasetTUM_VI"/dataset-room5_512_16/mav0/cam1/data Stereo-Inertial/TUM_TimeStamps/dataset-room5_512.txt Stereo-Inertial/TUM_IMU/dataset-room5_512.txt "$pathDatasetTUM_VI"/dataset-room6_512_16/mav0/cam0/data "$pathDatasetTUM_VI"/dataset-room6_512_16/mav0/cam1/data Stereo-Inertial/TUM_TimeStamps/dataset-room6_512.txt Stereo-Inertial/TUM_IMU/dataset-room6_512.txt dataset-rooms123456_stereoi
+}
+
+StereoInertialExamples

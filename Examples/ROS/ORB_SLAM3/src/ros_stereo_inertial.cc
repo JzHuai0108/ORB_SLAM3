@@ -49,7 +49,8 @@ public:
 class ImageGrabber
 {
 public:
-    ImageGrabber(ORB_SLAM3::System* pSLAM, ImuGrabber *pImuGb, const bool bRect, const bool bClahe): mpSLAM(pSLAM), mpImuGb(pImuGb), do_rectify(bRect), mbClahe(bClahe){}
+    ImageGrabber(ORB_SLAM3::System* pSLAM, ImuGrabber *pImuGb, const std::string &outputFile, const bool bRect, const bool bClahe): 
+      mpSLAM(pSLAM), mpImuGb(pImuGb), mOutputFile(outputFile), do_rectify(bRect), mbClahe(bClahe){}
 
     void GrabImageLeft(const sensor_msgs::ImageConstPtr& msg);
     void GrabImageRight(const sensor_msgs::ImageConstPtr& msg);
@@ -62,6 +63,7 @@ public:
     ORB_SLAM3::System* mpSLAM;
     ImuGrabber *mpImuGb;
 
+    std::string mOutputFile;
     const bool do_rectify;
     cv::Mat M1l,M2l,M1r,M2r;
 
@@ -77,17 +79,17 @@ int main(int argc, char **argv)
   ros::NodeHandle n("~");
   ros::console::set_logger_level(ROSCONSOLE_DEFAULT_NAME, ros::console::levels::Info);
   bool bEqual = false;
-  if(argc < 4 || argc > 5)
+  if(argc < 5 || argc > 6)
   {
-    cerr << endl << "Usage: rosrun ORB_SLAM3 Stereo_Inertial path_to_vocabulary path_to_settings do_rectify [do_equalize]" << endl;
+    cerr << endl << "Usage: rosrun ORB_SLAM3 Stereo_Inertial path_to_vocabulary path_to_settings output_file do_rectify [do_equalize]" << endl;
     ros::shutdown();
     return 1;
   }
 
-  std::string sbRect(argv[3]);
-  if(argc==5)
+  std::string sbRect(argv[4]);
+  if(argc==6)
   {
-    std::string sbEqual(argv[4]);
+    std::string sbEqual(argv[5]);
     if(sbEqual == "true")
       bEqual = true;
   }
@@ -96,7 +98,7 @@ int main(int argc, char **argv)
   ORB_SLAM3::System SLAM(argv[1],argv[2],ORB_SLAM3::System::IMU_STEREO,true);
 
   ImuGrabber imugb;
-  ImageGrabber igb(&SLAM,&imugb,sbRect == "true",bEqual);
+  ImageGrabber igb(&SLAM,&imugb,argv[3],sbRect == "true",bEqual);
   
     if(igb.do_rectify)
     {      
@@ -196,7 +198,7 @@ cv::Mat ImageGrabber::GetImage(const sensor_msgs::ImageConstPtr &img_msg)
 void ImageGrabber::SyncWithImu()
 {
   const double maxTimeDiff = 0.01;
-  while(1)
+  while(ros::ok())
   {
     cv::Mat imLeft, imRight;
     double tImLeft = 0, tImRight = 0;
@@ -273,6 +275,21 @@ void ImageGrabber::SyncWithImu()
       std::this_thread::sleep_for(tSleep);
     }
   }
+  // Stop all threads
+  mpSLAM->Shutdown();
+
+  // Save camera trajectory
+  std::chrono::system_clock::time_point scNow = std::chrono::system_clock::now();
+  std::time_t now = std::chrono::system_clock::to_time_t(scNow);
+  std::stringstream ss;
+  ss << now;
+ 
+  const string kf_file = mOutputFile.substr(0, mOutputFile.size() - 4) + "_kf" + mOutputFile.substr(mOutputFile.size() - 4);
+  const string f_file =  mOutputFile;
+  std::cout << "Save camera trajectory to " << f_file << std::endl;
+  std::cout << "Save keyframe trajectory to " << kf_file << std::endl;
+  mpSLAM->SaveTrajectoryEuRoC(f_file);
+  mpSLAM->SaveKeyFrameTrajectoryEuRoC(kf_file);
 }
 
 void ImuGrabber::GrabImu(const sensor_msgs::ImuConstPtr &imu_msg)

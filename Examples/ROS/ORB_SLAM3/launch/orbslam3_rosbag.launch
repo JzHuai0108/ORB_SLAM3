@@ -1,0 +1,30 @@
+<launch>
+  <arg name="config_filename" default="$(find ORB_SLAM3)/../../Stereo-Inertial/TUM_512.yaml" />
+  <arg name="vocabulary_path" default="$(find ORB_SLAM3)/../../../Vocabulary/ORBvoc.txt" />
+  <arg name="cam0_topic" default="/cam0/image_raw"/>
+  <arg name="cam1_topic" default="/cam1/image_raw"/>
+  <arg name="imu_topic" default="/imu0"/>
+  <arg name="online_rectify" default="false"/>
+  <!-- No need to rectify for TUMVI dataset, but needs equalize following stereo_inertial_tum_vi.cc -->
+  <arg name="equalize" default="true"/>
+  <arg name="play_rate" default="0.5"/>
+  <arg name="start_into_bag" default="0.0"/>
+  <arg name="bag_file" default="corridor.bag"/>
+  <arg name="output_file" default="trajectory.txt"/>
+
+  <node name="Stereo_Inertial" pkg="ORB_SLAM3" type="Stereo_Inertial" output="screen" 
+      args="$(arg vocabulary_path)
+      $(arg config_filename)
+      $(arg output_file)
+      $(arg online_rectify)
+      $(arg equalize)">
+    <remap from="/camera/left/image_raw" to="$(arg cam0_topic)" />
+    <remap from="/camera/right/image_raw" to="$(arg cam1_topic)" />
+    <remap from="/imu" to="$(arg imu_topic)" />
+  </node>
+
+  <node pkg="rosbag" type="play" name="player" args="-s $(arg start_into_bag) 
+     -r $(arg play_rate) $(arg bag_file)" output="log" required="true">
+  </node>
+</launch>
+
