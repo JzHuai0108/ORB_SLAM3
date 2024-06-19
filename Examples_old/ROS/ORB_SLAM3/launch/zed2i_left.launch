@@ -1,0 +1,17 @@
+<launch>
+    <arg name="bagname" default="" />
+    <arg name="configyaml" default="$(find ORB_SLAM3)/config/ZED2iLeft.yaml" />
+    <arg name="vocfile" default="$(find ORB_SLAM3)/../../../Vocabulary/ORBvoc.txt" />
+
+    <node name="mono" pkg="ORB_SLAM3" type="Mono" args="$(arg vocfile) $(arg configyaml)" output="screen" required="false">
+    </node>
+
+    <node name="image_transport" pkg="image_transport" type="republish" 
+        args="compressed in:=/zed2i/zed_node/left_raw/image_raw_gray raw out:=/camera/image_raw" output="screen" required="false">
+        <param name="image_transport" value="compressed"/>
+    </node>
+
+    <node name="bag" pkg="rosbag" type="play" args="$(arg bagname)" output="screen" required="false">
+    </node>
+
+</launch>

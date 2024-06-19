@@ -22,7 +22,9 @@
 #include<fstream>
 #include<chrono>
 
-#include<ros/ros.h>
+#include <ros/ros.h>
+#include <rosbag/bag.h>
+#include <rosbag/view.h>
 #include <cv_bridge/cv_bridge.h>
 
 #include<opencv2/core/core.hpp>
@@ -67,6 +69,7 @@ int main(int argc, char **argv)
     SLAM.Shutdown();
 
     // Save camera trajectory
+    SLAM.SaveTrajectoryEuRoC("FrameTrajectory.txt");
     SLAM.SaveKeyFrameTrajectoryTUM("KeyFrameTrajectory.txt");
 
     ros::shutdown();

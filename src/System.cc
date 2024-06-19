@@ -651,7 +651,7 @@ void System::SaveKeyFrameTrajectoryTUM(const string &filename)
         Sophus::SE3f Twc = pKF->GetPoseInverse();
         Eigen::Quaternionf q = Twc.unit_quaternion();
         Eigen::Vector3f t = Twc.translation();
-        f << setprecision(6) << pKF->mTimeStamp << setprecision(7) << " " << t(0) << " " << t(1) << " " << t(2)
+        f << setprecision(9) << pKF->mTimeStamp << setprecision(7) << " " << t(0) << " " << t(1) << " " << t(2)
           << " " << q.x() << " " << q.y() << " " << q.z() << " " << q.w() << endl;
 
     }
@@ -685,6 +685,8 @@ void System::SaveTrajectoryEuRoC(const string &filename)
 
     vector<KeyFrame*> vpKFs = pBiggerMap->GetAllKeyFrames();
     sort(vpKFs.begin(),vpKFs.end(),KeyFrame::lId);
+    std::cout << "We will save the poses of frames in the biggest map " 
+        << std::to_string(pBiggerMap->GetId()) << " with " << std::to_string(vpKFs.size()) << " KFs" << std::endl;
 
     // Transform all keyframes so that the first keyframe is at the origin.
     // After a loop closure the first keyframe might not be at the origin.
@@ -759,14 +761,14 @@ void System::SaveTrajectoryEuRoC(const string &filename)
             Sophus::SE3f Twb = (pKF->mImuCalib.mTbc * (*lit) * Trw).inverse();
             Eigen::Quaternionf q = Twb.unit_quaternion();
             Eigen::Vector3f twb = Twb.translation();
-            f << setprecision(6) << 1e9*(*lT) << " " <<  setprecision(9) << twb(0) << " " << twb(1) << " " << twb(2) << " " << q.x() << " " << q.y() << " " << q.z() << " " << q.w() << endl;
+            f << setprecision(9) << (*lT) << " " <<  setprecision(9) << twb(0) << " " << twb(1) << " " << twb(2) << " " << q.x() << " " << q.y() << " " << q.z() << " " << q.w() << endl;
         }
         else
         {
             Sophus::SE3f Twc = ((*lit)*Trw).inverse();
             Eigen::Quaternionf q = Twc.unit_quaternion();
             Eigen::Vector3f twc = Twc.translation();
-            f << setprecision(6) << 1e9*(*lT) << " " <<  setprecision(9) << twc(0) << " " << twc(1) << " " << twc(2) << " " << q.x() << " " << q.y() << " " << q.z() << " " << q.w() << endl;
+            f << setprecision(9) << (*lT) << " " <<  setprecision(9) << twc(0) << " " << twc(1) << " " << twc(2) << " " << q.x() << " " << q.y() << " " << q.z() << " " << q.w() << endl;
         }
 
         // cout << "5" << endl;

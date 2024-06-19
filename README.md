@@ -186,7 +186,13 @@ and add at the end the following line. Replace PATH by the folder where you clon
 For a monocular input from topic `/camera/image_raw` run node ORB_SLAM3/Mono. You will need to provide the vocabulary file and a settings file. See the monocular examples above.
 
   ```
+  export ROS_PACKAGE_PATH=${ROS_PACKAGE_PATH}:PATH/ORB_SLAM3/Examples_old/ROS
+  export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/home/$USER/Documents/slam_devel/lib
   rosrun ORB_SLAM3 Mono PATH_TO_VOCABULARY PATH_TO_SETTINGS_FILE
+  # if the input image is compressed, you can republish it uncompressed with image_transport
+  # rosrun image_transport republish compressed in:=/zed2i/zed_node/left_raw/image_raw_gray raw out:=/camera/image_raw _image_transport:=compressed
+  # in another terminal
+  rosbag play --pause zed2i.bag
   ```
 
 ### Running Monocular-Inertial Node

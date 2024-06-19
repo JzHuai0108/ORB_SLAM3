@@ -69,6 +69,18 @@ target_link_libraries(Mono
 ${LIBS}
 )
 
+find_package(rosbag REQUIRED)
+include_directories(${rosbag_INCLUDE_DIRS})
+
+rosbuild_add_executable(MonoBag
+src/ros_mono_bag.cc
+)
+
+target_link_libraries(MonoBag
+${LIBS}
+${rosbag_LIBRARIES}
+)
+
 # Node for monocular camera (Augmented Reality Demo)
 rosbuild_add_executable(MonoAR
 src/AR/ros_mono_ar.cc
