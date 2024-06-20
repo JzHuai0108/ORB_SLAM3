@@ -63,7 +63,10 @@ We use [Pangolin](https://github.com/stevenlovegrove/Pangolin) for visualization
 git clone --recursive https://github.com/stevenlovegrove/Pangolin
 cd Pangolin
 ./scripts/install_prerequisites.sh recommended
-cmake -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/home/$USER/Documents/slam_devel
+cmake -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/home/$USER/Documents/slam_devel -DBUILD_PANGOLIN_FFMPEG=OFF -DBUILD_PANGOLIN_LIBTIFF=OFF
+# we disable ffmpeg because of "/libavcodec.a(lpc.o): relocation R_X86_64_32S against `.rodata' can not be used when making a shared object"
+# we disable libtiff for pangolin because libtiff may come from a conda environment or the ubuntu system, causing the error 
+# "lib/libpango_image.so.0.9.1: undefined reference to `TIFFGetField@LIBTIFF_4.0'"
 cmake --build build
 cd build && make install
 ```
@@ -172,7 +175,7 @@ Tested with ROS Melodic and ubuntu 18.04.
 and add at the end the following line. Replace PATH by the folder where you cloned ORB_SLAM3:
 
   ```
-  export ROS_PACKAGE_PATH=${ROS_PACKAGE_PATH}:PATH/ORB_SLAM3/Examples/ROS
+  export ROS_PACKAGE_PATH=${ROS_PACKAGE_PATH}:PATH/ORB_SLAM3/Examples_old/ROS
   ```
   
 2. Execute `build_ros.sh` script:
